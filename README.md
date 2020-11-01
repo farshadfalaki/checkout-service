@@ -40,6 +40,6 @@ Output is the total price of the shopping cart according to the prices and offer
 
 
 ### Next Improvement:
-##Business 
+## Business 
 As like a real *supermarket*, after scanning each item, the total amount is displayed to the customer. Then in the output of **Scan-arbitary-number-of-items** we could return whole items with total price for each item and total price of the shopping cart and maybe total discount that customer earns from this shopping.       
 By this change, at the end of each **Scan-arbitary-number-of-items** call, total price is calculated, persisted and returned to the client. In this case most of the time there is no need to call **Calculate-the-total-price** as anything is returned in the response of each **Scan-arbitary-number-of-items**. We also should consider the differences between shppoing at a real supermarket and an online supermarket which customer can pay a long time after creating the shopping cart.
