@@ -1,0 +1,31 @@
+version: '3.3'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  mongo_db:
+    image: mongo:latest
+    environment:
+      ADVERTISED_HOST: 192.168.99.100
+      ADVERTISED_PORT: 27017
+    ports:
+      - "27017:27017"
+    networks:
+      - app-tier
+
+  checkout-app:
+    image: checkout
+    depends_on:
+      - mongo_db
+    ports:
+      - 8080:8080
+    environment:
+      spring.data.mongodb.uri: mongodb://mongo_db:27017
+
+    networks:
+      - app-tier
+# Names our volume
+volumes:
+  my-db:
