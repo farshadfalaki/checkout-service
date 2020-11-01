@@ -1,7 +1,26 @@
 # checkout-service
-This Spring-Boot application is implemented to provides an API for a checkout system in a
+This application is implemented to provides an API for a checkout system in a
 supermarket. It should offer its clients the possibility to register an arbitrary number of items in a shopping cart and
 calculate the cart's total price in the end.
+
+The application uses JDK 8, Spring-Boot, Mongodb.  
+
+
+#### Prerequisites
++ JDK 8+
++ Maven
++ Docker , Docker-compose
+### Installation
+After pulling the code, make *install.sh* script file executable.
+```
+chmod 770 install.sh
+```
+Now to run the application execute script *install.sh*
+```
+./install.sh
+```
+### Service API
+Endpoint API details are avaiable at swagger url http://localhost:8080/swagger-ui.html
 
 ### Comment 
 I think it was better that prices and offers were completely seprate from the shopping cart. Prices could change independently and
@@ -25,6 +44,7 @@ The aim is to start the checkout process. <br />
 Input is a *PricingRuleBundle* which consists of a list of prices and offers.<br />
 Output is the created **Checkout** object containing an unique **checkoutId**. It is used in **Scan-arbitary-number-of-items** and **Calculate-the-total-price** use cases.
 
+
         
 #### Scan-arbitary-number-of-items 
 The aim is add one or serveral number of items to the shopping cart.<br />
@@ -38,8 +58,19 @@ The aim is to calculate the total price.<br />
 Input is **checkoutId** which is obtaind from the output of **Create-checkout** use case.
 Output is the total price of the shopping cart according to the prices and offers defined in **Create-checkout** use case. 
 
+###
 
 ### Next Improvement:
-## Business 
+#### Business related 
 As like a real *supermarket*, after scanning each item, the total amount is displayed to the customer. Then in the output of **Scan-arbitary-number-of-items** we could return whole items with total price for each item and total price of the shopping cart and maybe total discount that customer earns from this shopping.       
-By this change, at the end of each **Scan-arbitary-number-of-items** call, total price is calculated, persisted and returned to the client. In this case most of the time there is no need to call **Calculate-the-total-price** as anything is returned in the response of each **Scan-arbitary-number-of-items**. We also should consider the differences between shppoing at a real supermarket and an online supermarket which customer can pay a long time after creating the shopping cart.
+By this change, at the end of each **Scan-arbitary-number-of-items** call, total price is calculated, persisted and returned to the client. In this case most of the time there is no need to call **Calculate-the-total-price** as anything is returned in the response of each **Scan-arbitary-number-of-items**. We also should consider the differences between shppoing at a real supermarket and an online supermarket which customer can pay a long time after creating the shopping cart.<br />
+Add endpoint in order to remove items from shopping cart.
+
+#### Technical related
+Seprating completely request and response dto from model and add correspondings mappers.<br />
+Use more specific error message in responses beisdes http status codes.<br />
+Add more logs.<br />
+More clear validation error messages to distinguish invalid checkoutId and invalid SKU.<br />
+Cleanup db before and after running integration tests.<br />
+Checking duplicated products in pricingRules.<br />
+Defining some error message, context urls in Constant classes.<br />
