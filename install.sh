@@ -1,6 +1,6 @@
 #!/bin/bash
-echo '******Building the entire project******'
-mvn clean package -DskipTests
+echo '******Building the entire project and run the unit tests******'
+mvn clean package
 
 echo '******Building docker files******'
 echo '**User should have permission to run docker**'
