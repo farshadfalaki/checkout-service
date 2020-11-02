@@ -15,7 +15,7 @@ After pulling the code, make *install.sh* script file executable.
 ```
 chmod 770 install.sh
 ```
-Now to run the application execute script *install.sh*
+Now to run the application and unit tests ,execute script *install.sh*
 ```
 ./install.sh
 ```
