@@ -31,24 +31,19 @@ public class CheckoutServiceImpl implements CheckoutService{
 
     @Override
     public Optional<Checkout> addItems(String checkoutId,Item newItem) {
-        Checkout updatedCheckout = null;
-        Optional<Checkout> optionalCheckout = checkoutRepository.findById(checkoutId);
-        if (optionalCheckout.isPresent()){
-            Checkout fetchedCheckout = optionalCheckout.get();
-            if(itemValidator.isValidItem(newItem,fetchedCheckout.getPricingRules())) {
-                Optional<Item> optionalItemInShoppingCart = fetchedCheckout.getItems().stream()
-                    .filter(item -> item.getSku().equals(newItem.getSku()))
-                    .findFirst();
-
-                if (optionalItemInShoppingCart.isPresent()) {
-                    optionalItemInShoppingCart.get().addQuantity(newItem.getQuantity());
-                } else {
-                    fetchedCheckout.getItems().add(newItem);
-                }
-                updatedCheckout = checkoutRepository.save(fetchedCheckout);
-            }
-        }
-        return Optional.ofNullable(updatedCheckout);
+        return checkoutRepository.findById(checkoutId)
+                .filter(fetchedCheckout ->  itemValidator.isValidItem(newItem,fetchedCheckout.getPricingRules()))
+                .map(fetchedCheckout -> {
+                    Optional<Item> optionalItemInShoppingCart = fetchedCheckout.getItems().stream()
+                            .filter(item -> item.getSku().equals(newItem.getSku()))
+                            .findFirst();
+                    if (optionalItemInShoppingCart.isPresent()) {
+                        optionalItemInShoppingCart.get().addQuantity(newItem.getQuantity());
+                    } else {
+                        fetchedCheckout.getItems().add(newItem);
+                    }
+                    return checkoutRepository.save(fetchedCheckout);
+                });
     }
 
     @Override
